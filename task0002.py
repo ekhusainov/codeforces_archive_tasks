@@ -4,11 +4,13 @@ https://codeforces.com/problemset/problem/71/A
 
 MAX_LEN_WORD = 10
 
+
 def k8s_like(word):
     first_char = word[0]
     last_char = word[-1]
     middle_number = str(len(word) - 2)
     return first_char + middle_number + last_char
+
 
 def main():
     number_input = int(input())
@@ -22,7 +24,7 @@ def main():
             answer_words.append(current_word)
         else:
             answer_words.append(k8s_like(current_word))
-    
+
     for i in answer_words:
         print(i)
 
