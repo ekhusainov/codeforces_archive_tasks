@@ -78,13 +78,13 @@ def main():
     t = int(input())
     for _ in range(t):
         n, x = map(int, input().split())
-        arr = map(lambda x: int(x) % 2, input().split())
+        arr = list(map(lambda x: int(x) % 2, input().split()))
         count0 = arr.count(0)
         count1 = n - count0
         if count0 == n:
             print(NO)
         elif count1 == n:
-            if n % 2 == 0:
+            if x % 2 == 0:
                 print(NO)
             else:
                 print(YES)
