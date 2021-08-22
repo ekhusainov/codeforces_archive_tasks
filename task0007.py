@@ -3,13 +3,14 @@ import sys
 
 def get_d(a, b, c):
     diff = abs(a - b)
-    if (a + b) % 2 == 1:
+    if c > diff * 2:
+        return -1
+    
+    if diff < a and diff < b:
         return -1
     if c <= diff:
         return diff + c
-    if diff * 2 < c:
-        return -1
-    if c - diff == a or c - dicc == b:
+    if c - diff == a or c - diff == b:
         return -1
     return c - diff
 

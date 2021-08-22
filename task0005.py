@@ -2,6 +2,11 @@
 https://codeforces.com/problemset/problem/580/C
 """
 from collections import defaultdict
+import sys
+import threading
+
+sys.setrecursionlimit(10 ** 9)
+threading.stack_size(10 ** 8)
 
 
 def read_data():
@@ -17,12 +22,13 @@ def read_data():
 
 def dfs(tree, vertex, used, vertex_with_cats, ignored_cats, current_cats, list_cafe):
     used[vertex] = True
-    if current_cats > ignored_cats:
-        return list_cafe
     if vertex_with_cats[vertex] == 1:
         current_cats += 1
     else:
         current_cats = 0
+    if current_cats > ignored_cats:
+        return list_cafe
+
     flag_leaf = 1
     for new_vertex in tree[vertex]:
         if not used[new_vertex]:
@@ -40,7 +46,7 @@ def main():
     list_cafe = []
     list_cafe = dfs(tree, 0, used, vertex_with_cats,
                     ignored_cats, 0, list_cafe)
-    print(list_cafe)
+    print(len(list_cafe))
 
 
 if __name__ == "__main__":
