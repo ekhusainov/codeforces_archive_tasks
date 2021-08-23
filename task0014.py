@@ -1,5 +1,5 @@
 """
-https://codeforces.com/problemset/problem/313/B
+https://codeforces.com/problemset/problem/363/B
 """
 from sys import stdout, stdin
 from io import IOBase, BytesIO
@@ -69,22 +69,21 @@ def print(*args, **kwargs):
 stdin, stdout = IOWrapper(stdin), IOWrapper(stdout)
 def input(): return stdin.readline().rstrip("\r\n")
 
-from itertools import accumulate
+NO = "NO"
+YES = "YES"
 
 def main():
-    arr = input()
-    m = int(input())
-    eq_arr = []
-    for i in range(len(arr) - 1):
-        eq_arr.append(int(arr[i] == arr[i + 1]))
-
-    eq_arr = list(accumulate(eq_arr))
-    eq_arr.insert(0, 0)
-    for _ in range(m):
-        left, right = map(int, input().split())
-        left -= 1
-        right -= 1
-        print(eq_arr[right] - eq_arr[left])
+    t = int(input())
+    for _ in range(t):
+        n, k = map(int, input().split())
+        if n % 2 == 0 and k % 2 == 1:
+            print(NO)
+        elif n % 2 == 1 and k % 2 == 0:
+            print(NO)
+        elif k ** 2 > n:
+            print(NO)
+        else:
+            print(YES)
 
 
 if __name__ == "__main__":

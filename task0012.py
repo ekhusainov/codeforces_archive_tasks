@@ -81,15 +81,18 @@ def main():
     n = int(input())
     arr = list(map(int, input().split()))
     answer = 0
-    for i in range(n):
-        for j in range(i, n):
-            middle_part = arr[i:j+1]
-            left_part = sum(arr[0:i])
-            right_part = sum(arr[j+1:])
-            current_sum_1 = left_part + right_part + sum(middle_part)
-            current_sum_2 = left_part + right_part + \
-                sum(reverse_0_to_1(middle_part))
-            answer = max(answer, current_sum_1, current_sum_2)
+    if sum(arr) == n:
+        answer = n - 1
+    else:
+        for i in range(n):
+            for j in range(i, n):
+                middle_part = arr[i:j+1]
+                left_part = sum(arr[0:i])
+                right_part = sum(arr[j+1:])
+                current_sum_1 = left_part + right_part + sum(middle_part)
+                current_sum_2 = left_part + right_part + \
+                    sum(reverse_0_to_1(middle_part))
+                answer = max(answer, current_sum_1, current_sum_2)
     print(answer)
 
 

@@ -40,7 +40,7 @@ int main()
         cin >> left >> right;
         left--;
         right--;
-        current_sum = neq_eq_arr[right] - neq_eq_arr[left]
+        current_sum = neq_eq_arr[right] - neq_eq_arr[left];
     
         cout << current_sum << endl;
     }
