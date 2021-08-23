@@ -69,21 +69,23 @@ def print(*args, **kwargs):
 stdin, stdout = IOWrapper(stdin), IOWrapper(stdout)
 def input(): return stdin.readline().rstrip("\r\n")
 
-NO = "NO"
-YES = "YES"
+from itertools import accumulate
 
 def main():
-    t = int(input())
-    for _ in range(t):
-        n, k = map(int, input().split())
-        if n % 2 == 0 and k % 2 == 1:
-            print(NO)
-        elif n % 2 == 1 and k % 2 == 0:
-            print(NO)
-        elif k ** 2 > n:
-            print(NO)
-        else:
-            print(YES)
+    n, k = map(int, input().split())
+    arr = list(map(int, input().split()))
+    arr = list(accumulate(arr))
+    arr.insert(0, 0)
+    smallest_sum = 1e22
+    for i in range(len(arr) - k):
+        current_sum = arr[i + k] - arr[i]
+        if current_sum == k:
+            answer = i
+            break
+        if current_sum < smallest_sum:
+            smallest_sum = current_sum
+            answer = i
+    print(answer + 1)
 
 
 if __name__ == "__main__":
