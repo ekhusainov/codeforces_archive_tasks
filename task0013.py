@@ -1,5 +1,5 @@
 """
-https://codeforces.com/problemset/problem/327/A
+https://codeforces.com/problemset/problem/313/B
 """
 from sys import stdout, stdin
 from io import IOBase, BytesIO
@@ -70,27 +70,18 @@ stdin, stdout = IOWrapper(stdin), IOWrapper(stdout)
 def input(): return stdin.readline().rstrip("\r\n")
 
 
-def reverse_0_to_1(arr):
-    answer = []
-    for i in arr:
-        answer.append(1 - i)
-    return answer
-
-
 def main():
-    n = int(input())
-    arr = list(map(int, input().split()))
-    answer = 0
-    for i in range(n):
-        for j in range(i, n):
-            middle_part = arr[i:j+1]
-            left_part = sum(arr[0:i])
-            right_part = sum(arr[j+1:])
-            current_sum_1 = left_part + right_part + sum(middle_part)
-            current_sum_2 = left_part + right_part + \
-                sum(reverse_0_to_1(middle_part))
-            answer = max(answer, current_sum_1, current_sum_2)
-    print(answer)
+    arr = input()
+    m = int(input())
+    for _ in range(m):
+        left, right = map(int, input().split())
+        left -= 1
+        right -= 1
+        answer = 0
+        for i in range(left, right):
+            if arr[i] == arr[i + 1]:
+                answer += 1
+        print(answer)
 
 
 if __name__ == "__main__":
