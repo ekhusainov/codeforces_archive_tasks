@@ -1,5 +1,5 @@
 """
-https://codeforces.com/problemset/problem/1363/A
+https://codeforces.com/problemset/problem/1352/C
 """
 from sys import stdout, stdin
 from io import IOBase, BytesIO
@@ -69,26 +69,14 @@ def print(*args, **kwargs):
 stdin, stdout = IOWrapper(stdin), IOWrapper(stdout)
 def input(): return stdin.readline().rstrip("\r\n")
 
+from math import ceil
 
 def main():
     t = int(input())
     for _ in range(t):
-        _ = int(input())
-        arr = list(map(int, input().split()))
-        is_positive_element_flag = int(arr[0] > 0)
-        current_max_element = arr[0]
-        max_elems = []
-        for i in arr:
-            if int(i > 0) == is_positive_element_flag:
-                if i > current_max_element:
-                    current_max_element = i
-            else:
-                max_elems.append(current_max_element)
-                is_positive_element_flag = int(not is_positive_element_flag)
-                current_max_element = i
-        max_elems.append(current_max_element)
-        print(sum(max_elems))
-
+        n, k = map(int, input().split())
+        answer = (k - 1) // (n - 1) + k
+        print(answer)
 
 if __name__ == "__main__":
     main()
