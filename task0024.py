@@ -1,5 +1,5 @@
 """
-https://codeforces.com/problemset/problem/1424/G
+https://codeforces.com/problemset/problem/456/A
 """
 
 from sys import stdout, stdin
@@ -70,25 +70,24 @@ def print(*args, **kwargs):
 stdin, stdout = IOWrapper(stdin), IOWrapper(stdout)
 def input(): return stdin.readline().rstrip("\r\n")
 
+HAPPY_ALEX = "Happy Alex"
+POOR_ALEX = "Poor Alex"
 
 def main():
     n = int(input())
-    points = []
+    full_characteristic = []
+    quality = []
     for _ in range(n):
-        begin, die = map(int, input().split())
-        points.append((begin, 1))
-        points.append((die, -1))
-    best_point = 0
-    best_count = 0
-    current_count = 0
-    points = sorted(points)
-    for point in points:
-        current_count += point[1]
-        if current_count > best_count:
-            best_count = current_count
-            best_point = point[0]
-    print(best_point, best_count)
-
+        a, b = map(int, input().split())
+        full_characteristic.append((a, b))
+        quality.append(b)
+    full_characteristic = sorted(full_characteristic)
+    quality = sorted(quality)
+    only_b_from_full = [i[1] for i in full_characteristic]
+    if only_b_from_full == quality:
+        print(POOR_ALEX)
+    else:
+        print(HAPPY_ALEX)
 
 if __name__ == "__main__":
     main()

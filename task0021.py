@@ -1,7 +1,8 @@
 """
-https://codeforces.com/problemset/problem/1424/G
+https://codeforces.com/problemset/problem/1495/A
 """
 
+from math import sqrt
 from sys import stdout, stdin
 from io import IOBase, BytesIO
 from os import read, write, fstat
@@ -72,22 +73,24 @@ def input(): return stdin.readline().rstrip("\r\n")
 
 
 def main():
-    n = int(input())
-    points = []
-    for _ in range(n):
-        begin, die = map(int, input().split())
-        points.append((begin, 1))
-        points.append((die, -1))
-    best_point = 0
-    best_count = 0
-    current_count = 0
-    points = sorted(points)
-    for point in points:
-        current_count += point[1]
-        if current_count > best_count:
-            best_count = current_count
-            best_point = point[0]
-    print(best_point, best_count)
+    t = int(input())
+    for _ in range(t):
+        n = int(input())
+        miners = []
+        diamonds = []
+        for __ in range(2 * n):
+            coord1, coord2 = map(lambda x: abs(int(x)), input().split())
+            if coord1 == 0:
+                miners.append(coord2)
+            else:
+                diamonds.append(coord1)
+        miners = sorted(miners)
+        diamonds = sorted(diamonds)
+        answer = 0
+
+        for i in range(len(miners)):
+            answer += sqrt(miners[i] ** 2 + diamonds[i] ** 2)
+        print(answer)
 
 
 if __name__ == "__main__":

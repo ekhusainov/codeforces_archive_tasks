@@ -1,5 +1,5 @@
 """
-https://codeforces.com/problemset/problem/1424/G
+https://codeforces.com/problemset/problem/160/A
 """
 
 from sys import stdout, stdin
@@ -73,22 +73,15 @@ def input(): return stdin.readline().rstrip("\r\n")
 
 def main():
     n = int(input())
-    points = []
-    for _ in range(n):
-        begin, die = map(int, input().split())
-        points.append((begin, 1))
-        points.append((die, -1))
-    best_point = 0
-    best_count = 0
-    current_count = 0
-    points = sorted(points)
-    for point in points:
-        current_count += point[1]
-        if current_count > best_count:
-            best_count = current_count
-            best_point = point[0]
-    print(best_point, best_count)
-
+    arr = list(map(int, input().split()))
+    arr = sorted(arr, reverse=True)
+    middle = sum(arr) / 2
+    current_sum = 0
+    for idx, coin in enumerate(arr):
+        current_sum += coin
+        if current_sum > middle:
+            break
+    print(idx + 1)
 
 if __name__ == "__main__":
     main()

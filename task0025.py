@@ -1,5 +1,5 @@
 """
-https://codeforces.com/problemset/problem/1424/G
+https://codeforces.com/problemset/problem/230/A
 """
 
 from sys import stdout, stdin
@@ -71,23 +71,26 @@ stdin, stdout = IOWrapper(stdin), IOWrapper(stdout)
 def input(): return stdin.readline().rstrip("\r\n")
 
 
+YES = "YES"
+NO = "NO"
+
+
 def main():
-    n = int(input())
-    points = []
+    your_force, n = map(int, input().split())
+    dragons = []
     for _ in range(n):
-        begin, die = map(int, input().split())
-        points.append((begin, 1))
-        points.append((die, -1))
-    best_point = 0
-    best_count = 0
-    current_count = 0
-    points = sorted(points)
-    for point in points:
-        current_count += point[1]
-        if current_count > best_count:
-            best_count = current_count
-            best_point = point[0]
-    print(best_point, best_count)
+        dragon_force, bonus = map(int, input().split())
+        dragons.append((dragon_force, bonus))
+    dragons = sorted(dragons)
+    for dragon_force, bonus in dragons:
+        if your_force <= dragon_force:
+            your_force = 0
+            break
+        your_force += bonus
+    if your_force == 0:
+        print(NO)
+    else:
+        print(YES)
 
 
 if __name__ == "__main__":

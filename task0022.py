@@ -1,7 +1,3 @@
-"""
-https://codeforces.com/problemset/problem/1424/G
-"""
-
 from sys import stdout, stdin
 from io import IOBase, BytesIO
 from os import read, write, fstat
@@ -71,23 +67,29 @@ stdin, stdout = IOWrapper(stdin), IOWrapper(stdout)
 def input(): return stdin.readline().rstrip("\r\n")
 
 
+def find_max_mod(left, right):
+    if (right // 2 + 1) >= left:
+        return right % (right // 2 + 1)
+    else:
+        max_value = -1000
+        i = 1
+        x = 1
+        while x > max_value + 1:
+            x = (right - 1) // i + 1
+            temp = right % x
+            if temp > max_value:
+                max_value = temp
+            if x < left:
+                return right % left
+            i += 1
+        return max_value
+
+
 def main():
-    n = int(input())
-    points = []
-    for _ in range(n):
-        begin, die = map(int, input().split())
-        points.append((begin, 1))
-        points.append((die, -1))
-    best_point = 0
-    best_count = 0
-    current_count = 0
-    points = sorted(points)
-    for point in points:
-        current_count += point[1]
-        if current_count > best_count:
-            best_count = current_count
-            best_point = point[0]
-    print(best_point, best_count)
+    t = int(input())
+    for _ in range(t):
+        left, right = map(int, input().split())
+        print(find_max_mod(left, right))
 
 
 if __name__ == "__main__":

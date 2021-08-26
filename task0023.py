@@ -1,7 +1,6 @@
 """
-https://codeforces.com/problemset/problem/1424/G
+https://codeforces.com/problemset/problem/492/B
 """
-
 from sys import stdout, stdin
 from io import IOBase, BytesIO
 from os import read, write, fstat
@@ -72,22 +71,21 @@ def input(): return stdin.readline().rstrip("\r\n")
 
 
 def main():
-    n = int(input())
-    points = []
-    for _ in range(n):
-        begin, die = map(int, input().split())
-        points.append((begin, 1))
-        points.append((die, -1))
-    best_point = 0
-    best_count = 0
-    current_count = 0
-    points = sorted(points)
-    for point in points:
-        current_count += point[1]
-        if current_count > best_count:
-            best_count = current_count
-            best_point = point[0]
-    print(best_point, best_count)
+    n, l = map(int, input().split())
+    arr = list(map(int, input().split()))
+    arr = list(set(arr))
+    arr = sorted(arr)
+    if len(arr) == 1:
+        print(max(arr[0], l - arr[0]))
+    else:   
+        sub_arr = []
+        if n == 1:
+            sub_arr.append(0)
+        else:
+            for i in range(len(arr) - 1):
+                sub_arr.append(arr[i + 1] - arr[i])
+        answer = max(arr[0], max(sub_arr) / 2, l - arr[-1])
+        print(answer)
 
 
 if __name__ == "__main__":
