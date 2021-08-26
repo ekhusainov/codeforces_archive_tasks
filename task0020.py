@@ -72,7 +72,24 @@ def input(): return stdin.readline().rstrip("\r\n")
 
 
 def main():
-    pass
+    n = int(input())
+    segments = []
+    points = []
+    for _ in range(n):
+        begin, die = map(int, input().split())
+        segments.append((begin, die))
+        points.append((begin, 1))
+        points.append((die, -1))
+    best_point = 0
+    best_count = 0
+    current_count = 0
+    points = sorted(points)
+    for point in points:
+        current_count += point[1]
+        if current_count > best_count:
+            best_count = current_count
+            best_point = point[0]
+    print(best_point, best_count)
 
 
 if __name__ == "__main__":
