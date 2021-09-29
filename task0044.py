@@ -1,3 +1,7 @@
+"""
+https://codeforces.com/problemset/problem/21/C
+"""
+from itertools import accumulate
 from sys import stdout, stdin
 from io import IOBase, BytesIO
 from os import read, write, fstat
@@ -67,59 +71,30 @@ stdin, stdout = IOWrapper(stdin), IOWrapper(stdout)
 def input(): return stdin.readline().rstrip("\r\n")
 
 
-X = "X"
-PLUS = "+"
-MINUS = "-"
-EQUAL = "="
-TWO = "2"
-ONE = "1"
-NO = "NO"
-YES = "YES"
+def solve(arr):
+    if len(arr) <= 2:
+        return 0
+    sum_arr = sum(arr)
+    if sum_arr % 3:
+        return 0
+
+    good_part = sum_arr // 3
+    acc_arr = list(accumulate(arr))
+    answer = 0
+    if sum_arr == 0:
+        count_0 = acc_arr.count(0)
+        return (count_0 - 1) * (count_0 - 2) // 2
+    for idx, elem in enumerate(acc_arr):
+        if elem != good_part:
+            continue
+        answer += acc_arr[idx:].count(good_part * 2)
+    return answer
 
 
 def main():
-    t = int(input())
-    for _ in range(t):
-        n = int(input())
-        what_want = input()
-        arr = [[0] * n for i in range(n)]
-        for i in range(n):
-            arr[i][i] = X
-        only_2 = []
-        for idx, s in enumerate(what_want):
-            if s == TWO:
-                only_2.append(idx)
-        if len(only_2) == 1 or len(only_2) == 2:
-            print(NO)
-            continue
-
-        for i in only_2:
-            we_have_winner = 0
-            for j in only_2:
-                if i == j:
-                    continue
-                if arr[i][j] == 0:
-                    if not we_have_winner:
-                        arr[i][j] = PLUS
-                        arr[j][i] = MINUS
-                        we_have_winner = 1
-                    else:
-                        arr[i][j] = MINUS
-                        arr[j][i] = PLUS
-
-        only_1 = []
-        for idx, s in enumerate(what_want):
-            if s == ONE:
-                only_1.append(idx)
-        for i in range(n):
-            for j in range(n):
-                if arr[i][j] == 0:
-                    arr[i][j] = EQUAL
-                    arr[j][i] = EQUAL
-        print(YES)
-        for i in range(n):
-            current_player = arr[i]
-            print("".join(current_player))
+    n = int(input())
+    arr = list(map(int, input().split()))
+    print(solve(arr))
 
 
 if __name__ == "__main__":

@@ -67,59 +67,25 @@ stdin, stdout = IOWrapper(stdin), IOWrapper(stdout)
 def input(): return stdin.readline().rstrip("\r\n")
 
 
-X = "X"
-PLUS = "+"
-MINUS = "-"
-EQUAL = "="
-TWO = "2"
-ONE = "1"
-NO = "NO"
-YES = "YES"
+def argsort(seq):
+    return sorted(range(len(seq)), key=seq.__getitem__)
 
 
 def main():
     t = int(input())
     for _ in range(t):
         n = int(input())
-        what_want = input()
-        arr = [[0] * n for i in range(n)]
-        for i in range(n):
-            arr[i][i] = X
-        only_2 = []
-        for idx, s in enumerate(what_want):
-            if s == TWO:
-                only_2.append(idx)
-        if len(only_2) == 1 or len(only_2) == 2:
-            print(NO)
-            continue
-
-        for i in only_2:
-            we_have_winner = 0
-            for j in only_2:
-                if i == j:
-                    continue
-                if arr[i][j] == 0:
-                    if not we_have_winner:
-                        arr[i][j] = PLUS
-                        arr[j][i] = MINUS
-                        we_have_winner = 1
-                    else:
-                        arr[i][j] = MINUS
-                        arr[j][i] = PLUS
-
-        only_1 = []
-        for idx, s in enumerate(what_want):
-            if s == ONE:
-                only_1.append(idx)
-        for i in range(n):
-            for j in range(n):
-                if arr[i][j] == 0:
-                    arr[i][j] = EQUAL
-                    arr[j][i] = EQUAL
-        print(YES)
-        for i in range(n):
-            current_player = arr[i]
-            print("".join(current_player))
+        arr = list(map(int, input().split()))
+        index_arg = argsort(arr)
+        answer = []
+        for idx, elem in enumerate(index_arg):
+            answer.append([idx + 1, elem + 1, elem])
+            for idx2, elem2 in enumerate(index_arg):
+                if elem2 < elem:
+                    index_arg[idx2] += 1
+        print(len(answer))
+        for i in answer:
+            print(*i)
 
 
 if __name__ == "__main__":

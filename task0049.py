@@ -67,59 +67,52 @@ stdin, stdout = IOWrapper(stdin), IOWrapper(stdout)
 def input(): return stdin.readline().rstrip("\r\n")
 
 
-X = "X"
-PLUS = "+"
-MINUS = "-"
-EQUAL = "="
-TWO = "2"
-ONE = "1"
-NO = "NO"
-YES = "YES"
+MAX_VALUE = 1000_000_000_000
 
 
 def main():
-    t = int(input())
-    for _ in range(t):
-        n = int(input())
-        what_want = input()
-        arr = [[0] * n for i in range(n)]
-        for i in range(n):
-            arr[i][i] = X
-        only_2 = []
-        for idx, s in enumerate(what_want):
-            if s == TWO:
-                only_2.append(idx)
-        if len(only_2) == 1 or len(only_2) == 2:
-            print(NO)
-            continue
+    n = int(input())
+    heroes = list(map(int, input().split()))
+    dragon_numbers = int(input())
+    for _ in range(dragon_numbers):
+        x, y = map(int, input().split())
+        better_than_dragon = MAX_VALUE
+        worst_than_dragon = 0
+        sum_heroes = sum(heroes)
+        max_heroes = 0
+        min_heroes = MAX_VALUE
+        for i in heroes:
+            if i >= x:
+                if (i - x) < (better_than_dragon - x):
+                    better_than_dragon = i
+            else:
+                if (x - i) < (x - worst_than_dragon):
+                    worst_than_dragon = i
+            if i > max_heroes:
+                max_heroes = i
+            if i < min_heroes:
+                min_heroes = i
 
-        for i in only_2:
-            we_have_winner = 0
-            for j in only_2:
-                if i == j:
-                    continue
-                if arr[i][j] == 0:
-                    if not we_have_winner:
-                        arr[i][j] = PLUS
-                        arr[j][i] = MINUS
-                        we_have_winner = 1
-                    else:
-                        arr[i][j] = MINUS
-                        arr[j][i] = PLUS
-
-        only_1 = []
-        for idx, s in enumerate(what_want):
-            if s == ONE:
-                only_1.append(idx)
-        for i in range(n):
-            for j in range(n):
-                if arr[i][j] == 0:
-                    arr[i][j] = EQUAL
-                    arr[j][i] = EQUAL
-        print(YES)
-        for i in range(n):
-            current_player = arr[i]
-            print("".join(current_player))
+        if better_than_dragon == MAX_VALUE:
+            better_than_dragon = max_heroes
+            others = sum_heroes - better_than_dragon
+            if others > y:
+                print(x - better_than_dragon)
+            else:
+                print(x - better_than_dragon + y - others)
+        elif worst_than_dragon == 0:
+            worst_than_dragon = min_heroes
+            others = sum_heroes - worst_than_dragon
+            if others > y:
+                print(0)
+            else:
+                print(y - others)
+        else:
+            answer1 = max(y - (sum_heroes - better_than_dragon), 0)
+            answer2 = x - worst_than_dragon + \
+                max(y - (sum_heroes - worst_than_dragon), 0)
+            answer = min(answer1, answer2)
+            print(answer)
 
 
 if __name__ == "__main__":

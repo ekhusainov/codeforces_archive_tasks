@@ -1,3 +1,7 @@
+"""
+https://codeforces.com/problemset/problem/20/C?locale=ru
+"""
+from heapq import heappop, heappush
 from sys import stdout, stdin
 from io import IOBase, BytesIO
 from os import read, write, fstat
@@ -67,59 +71,49 @@ stdin, stdout = IOWrapper(stdin), IOWrapper(stdout)
 def input(): return stdin.readline().rstrip("\r\n")
 
 
-X = "X"
-PLUS = "+"
-MINUS = "-"
-EQUAL = "="
-TWO = "2"
-ONE = "1"
-NO = "NO"
-YES = "YES"
+INF = float("inf")
+
+
+def read_data():
+    n, m = map(int, input().split())
+    graph = [[] for _ in range(n)]
+    for _ in range(m):
+        node1, node2, weight = map(int, input().split())
+        node1 -= 1
+        node2 -= 1
+        graph[node1].append((node2, weight))
+        graph[node2].append((node1, weight))
+    return n, graph
+
+
+def dijkstra(graph, start=0):
+    n = len(graph)
+    dist, parents_list = [INF] * n, [-1] * n
+    dist[start] = 0
+
+    queue = [(0, start)]
+    while queue:
+        path_len, v = heappop(queue)
+        if path_len == dist[v]:
+            for (w, edge_len) in graph[v]:
+                if edge_len + path_len < dist[w]:
+                    dist[w], parents_list[w] = edge_len + path_len, v
+                    heappush(queue, (edge_len + path_len, w))
+    return parents_list
 
 
 def main():
-    t = int(input())
-    for _ in range(t):
-        n = int(input())
-        what_want = input()
-        arr = [[0] * n for i in range(n)]
-        for i in range(n):
-            arr[i][i] = X
-        only_2 = []
-        for idx, s in enumerate(what_want):
-            if s == TWO:
-                only_2.append(idx)
-        if len(only_2) == 1 or len(only_2) == 2:
-            print(NO)
-            continue
-
-        for i in only_2:
-            we_have_winner = 0
-            for j in only_2:
-                if i == j:
-                    continue
-                if arr[i][j] == 0:
-                    if not we_have_winner:
-                        arr[i][j] = PLUS
-                        arr[j][i] = MINUS
-                        we_have_winner = 1
-                    else:
-                        arr[i][j] = MINUS
-                        arr[j][i] = PLUS
-
-        only_1 = []
-        for idx, s in enumerate(what_want):
-            if s == ONE:
-                only_1.append(idx)
-        for i in range(n):
-            for j in range(n):
-                if arr[i][j] == 0:
-                    arr[i][j] = EQUAL
-                    arr[j][i] = EQUAL
-        print(YES)
-        for i in range(n):
-            current_player = arr[i]
-            print("".join(current_player))
+    n, graph = read_data()
+    parents_list = dijkstra(graph)
+    if parents_list[n - 1] == -1:
+        print(-1)
+    else:
+        full_path, parent = [], n - 1
+        while parent != parents_list[0]:
+            full_path.append(parent + 1)
+            parent = parents_list[parent]
+        full_path.reverse()
+        print(*full_path)
 
 
 if __name__ == "__main__":

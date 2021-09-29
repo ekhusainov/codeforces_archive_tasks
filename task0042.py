@@ -67,59 +67,40 @@ stdin, stdout = IOWrapper(stdin), IOWrapper(stdout)
 def input(): return stdin.readline().rstrip("\r\n")
 
 
-X = "X"
-PLUS = "+"
-MINUS = "-"
-EQUAL = "="
-TWO = "2"
-ONE = "1"
-NO = "NO"
-YES = "YES"
-
-
 def main():
     t = int(input())
     for _ in range(t):
-        n = int(input())
-        what_want = input()
-        arr = [[0] * n for i in range(n)]
-        for i in range(n):
-            arr[i][i] = X
-        only_2 = []
-        for idx, s in enumerate(what_want):
-            if s == TWO:
-                only_2.append(idx)
-        if len(only_2) == 1 or len(only_2) == 2:
-            print(NO)
+        bin_string = input()
+        if len(bin_string) == 1:
+            if bin_string == "0":
+                print(1)
+            else:
+                print(0)
             continue
-
-        for i in only_2:
-            we_have_winner = 0
-            for j in only_2:
-                if i == j:
-                    continue
-                if arr[i][j] == 0:
-                    if not we_have_winner:
-                        arr[i][j] = PLUS
-                        arr[j][i] = MINUS
-                        we_have_winner = 1
-                    else:
-                        arr[i][j] = MINUS
-                        arr[j][i] = PLUS
-
-        only_1 = []
-        for idx, s in enumerate(what_want):
-            if s == ONE:
-                only_1.append(idx)
-        for i in range(n):
-            for j in range(n):
-                if arr[i][j] == 0:
-                    arr[i][j] = EQUAL
-                    arr[j][i] = EQUAL
-        print(YES)
-        for i in range(n):
-            current_player = arr[i]
-            print("".join(current_player))
+        count_a_row = 1
+        prev_elem = bin_string[0]
+        first_elem = bin_string[0]
+        for s in bin_string[1:]:
+            if count_a_row > 3:
+                break
+            if s != prev_elem:
+                count_a_row += 1
+                prev_elem = s
+        if count_a_row > 3:
+            print(2)
+        elif count_a_row == 3:
+            if first_elem == "0":
+                print(2)
+            else:
+                print(1)
+        elif count_a_row == 2:
+            print(1)
+        else:
+            if first_elem == "0":
+                print(1)
+            else:
+                print(0)
+            
 
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 from sys import stdout, stdin
 from io import IOBase, BytesIO
 from os import read, write, fstat
+import os
 
 BUFSIZE = 8192
 
@@ -67,59 +68,52 @@ stdin, stdout = IOWrapper(stdin), IOWrapper(stdout)
 def input(): return stdin.readline().rstrip("\r\n")
 
 
-X = "X"
-PLUS = "+"
-MINUS = "-"
-EQUAL = "="
-TWO = "2"
-ONE = "1"
-NO = "NO"
-YES = "YES"
+OUTPUT_FILEPATH = "somefile_0040.txt"
+INPUT_FILEPATH = "traffic_control_input.txt"
+MAX_VALUE = 1000
+
+
+def get_an_array_of_borders(sum_value, count_value):
+    min_value = sum_value // count_value
+    answer = [min_value] * (count_value - 1)
+    last_elem = sum_value - min_value * (count_value - 1)
+    answer.append(last_elem)
+    return answer
 
 
 def main():
-    t = int(input())
-    for _ in range(t):
-        n = int(input())
-        what_want = input()
-        arr = [[0] * n for i in range(n)]
-        for i in range(n):
-            arr[i][i] = X
-        only_2 = []
-        for idx, s in enumerate(what_want):
-            if s == TWO:
-                only_2.append(idx)
-        if len(only_2) == 1 or len(only_2) == 2:
-            print(NO)
+    with open(INPUT_FILEPATH, "r") as the_file:
+        data_input = [line.rstrip() for line in the_file]
+    finish_result = ""
+    t = int(data_input[0])
+    for idx in range(1, t + 1):
+        n, m, a, b = map(int, data_input[idx].split())
+
+        if n + m - 1 > a or n + m - 1 > b:
+            finish_result = finish_result + "Case #" + \
+                str(idx) + ": Impossible\n"
             continue
+        finish_result = finish_result + "Case #" + \
+            str(idx) + ": Possible\n"
+        first_raw = [1] * m
+        first_raw = list(map(str, first_raw))
+        first_raw = " ".join(first_raw)
+        finish_result = finish_result + first_raw + "\n"
+        left_border = get_an_array_of_borders(b - m, n - 1)
+        right_border = get_an_array_of_borders(a - m, n - 1)
 
-        for i in only_2:
-            we_have_winner = 0
-            for j in only_2:
-                if i == j:
-                    continue
-                if arr[i][j] == 0:
-                    if not we_have_winner:
-                        arr[i][j] = PLUS
-                        arr[j][i] = MINUS
-                        we_have_winner = 1
-                    else:
-                        arr[i][j] = MINUS
-                        arr[j][i] = PLUS
+        for i in range(n - 1):
+            current_raw = [MAX_VALUE] * (m - 2)
+            current_raw.append(right_border[i])
+            current_raw.insert(0, left_border[i])
+            current_raw = list(map(str, current_raw))
+            current_raw = " ".join(current_raw)
+            finish_result = finish_result + current_raw + "\n"
 
-        only_1 = []
-        for idx, s in enumerate(what_want):
-            if s == ONE:
-                only_1.append(idx)
-        for i in range(n):
-            for j in range(n):
-                if arr[i][j] == 0:
-                    arr[i][j] = EQUAL
-                    arr[j][i] = EQUAL
-        print(YES)
-        for i in range(n):
-            current_player = arr[i]
-            print("".join(current_player))
+    if os.path.exists(OUTPUT_FILEPATH):
+        os.remove(OUTPUT_FILEPATH)
+    with open(OUTPUT_FILEPATH, "a") as the_file:
+        the_file.write(finish_result)
 
 
 if __name__ == "__main__":

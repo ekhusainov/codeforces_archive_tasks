@@ -1,6 +1,7 @@
 from sys import stdout, stdin
 from io import IOBase, BytesIO
 from os import read, write, fstat
+import os
 
 BUFSIZE = 8192
 
@@ -67,59 +68,51 @@ stdin, stdout = IOWrapper(stdin), IOWrapper(stdout)
 def input(): return stdin.readline().rstrip("\r\n")
 
 
-X = "X"
-PLUS = "+"
-MINUS = "-"
-EQUAL = "="
-TWO = "2"
-ONE = "1"
-NO = "NO"
-YES = "YES"
+OUTPUT_FILEPATH = "somefile_0039.txt"
+INPUT_FILEPATH = "weak_typing_chapter_2_input.txt"
+MODULO = 1_000_000_007
+
+
+def how_many_times_to_change_the_hand(our_string):
+    answer_list = []
+    answer = -1
+    pred_chr = "init"
+    for s in our_string:
+        if s == "F":
+            answer_list.append(max(answer, 0))
+            continue
+        if s != pred_chr:
+            pred_chr = s
+            answer += 1
+        answer_list.append(max(answer, 0))
+    answer = max(answer, 0)
+    return answer_list
 
 
 def main():
-    t = int(input())
-    for _ in range(t):
-        n = int(input())
-        what_want = input()
-        arr = [[0] * n for i in range(n)]
-        for i in range(n):
-            arr[i][i] = X
-        only_2 = []
-        for idx, s in enumerate(what_want):
-            if s == TWO:
-                only_2.append(idx)
-        if len(only_2) == 1 or len(only_2) == 2:
-            print(NO)
-            continue
-
-        for i in only_2:
-            we_have_winner = 0
-            for j in only_2:
-                if i == j:
-                    continue
-                if arr[i][j] == 0:
-                    if not we_have_winner:
-                        arr[i][j] = PLUS
-                        arr[j][i] = MINUS
-                        we_have_winner = 1
-                    else:
-                        arr[i][j] = MINUS
-                        arr[j][i] = PLUS
-
-        only_1 = []
-        for idx, s in enumerate(what_want):
-            if s == ONE:
-                only_1.append(idx)
-        for i in range(n):
-            for j in range(n):
-                if arr[i][j] == 0:
-                    arr[i][j] = EQUAL
-                    arr[j][i] = EQUAL
-        print(YES)
-        for i in range(n):
-            current_player = arr[i]
-            print("".join(current_player))
+    with open(INPUT_FILEPATH, "r") as the_file:
+        data_input = [line.rstrip() for line in the_file]
+    finish_result = ""
+    t = int(data_input[0])
+    for idx in range(2, 2 * t + 1, 2):
+        current_string = data_input[idx]
+        answer = 0
+        for i in range(len(current_string)):
+            part_of_current_string = current_string[i:]
+            answer = (answer + sum(how_many_times_to_change_the_hand(part_of_current_string))) % MODULO
+        # part_answer = how_many_times_to_change_the_hand(current_string)
+        # len_current = len(current_string)
+        # for i in range(len_current):
+        #     for j in range(i + 1, len_current + 1):
+        #         sub_string = current_string[i: j]
+        #         part_answer = (
+        #             part_answer + how_many_times_to_change_the_hand(sub_string)) % MODULO
+        finish_result = finish_result + "Case #" + \
+            str(idx // 2) + ": " + str(answer) + "\n"
+    if os.path.exists(OUTPUT_FILEPATH):
+        os.remove(OUTPUT_FILEPATH)
+    with open(OUTPUT_FILEPATH, "a") as the_file:
+        the_file.write(finish_result)
 
 
 if __name__ == "__main__":

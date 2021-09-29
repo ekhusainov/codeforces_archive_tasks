@@ -115,3 +115,5 @@ dmypy.json
 
 
 somefile_0029.txt
+*.txt
+*.zip
