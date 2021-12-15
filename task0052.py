@@ -79,7 +79,9 @@ def main():
         index_arg = argsort(arr)
         answer = []
         for idx, elem in enumerate(index_arg):
-            answer.append([idx + 1, elem + 1, elem])
+            if idx == elem:
+                continue
+            answer.append([idx + 1, elem + 1, elem - idx])
             for idx2, elem2 in enumerate(index_arg):
                 if elem2 < elem:
                     index_arg[idx2] += 1
